@@ -13,13 +13,13 @@ class PortfolioController extends Controller
 {
     public function index(): View
     {
-//        $profile = User::first();
-//        $skills = Skill::all();
-//        $projects = Project::latest()->get();
-//        $experiences = Experience::orderBy('start_date', 'desc')->get();
-//        $contacts = Contact::all();
-//
-        return view('portfolio' );
+        $profile = User::first();
+        $skills = Skill::all();
+        $projects = Project::latest()->get();
+        $experiences = Experience::orderBy('start_date', 'desc')->get();
+        $contacts = Contact::all();
+
+        return view('portfolio', compact('profile', 'skills', 'projects', 'experiences', 'contacts'));
     }
 }
 

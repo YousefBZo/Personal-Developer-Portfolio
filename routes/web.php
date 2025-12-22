@@ -10,11 +10,11 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use Illuminate\Support\Facades\Route;
 
-//Route::get('/', [PortfolioController::class, 'index'])->name('home');
+Route::get('/home', [PortfolioController::class, 'index'])->name('home');
 
-//Route::get('/', function () {
-//    return view('dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

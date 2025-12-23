@@ -3,190 +3,182 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ $profile?->bio ?? 'Personal Developer Portfolio' }}">
-
     <title>{{ $profile?->name ?? 'Portfolio' }} - Developer Portfolio</title>
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700,800&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
 
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="antialiased bg-slate-50 text-slate-900">
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg shadow-sm border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="#" class="text-xl font-bold gradient-text">
-                    {{ $profile?->name ?? 'Portfolio' }}
+<body class="antialiased bg-white text-slate-900 font-['Plus_Jakarta_Sans']">
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+            <a href="#" class="text-2xl font-bold tracking-tight text-slate-900">
+                {{ $profile?->name ?? 'Portfolio' }}<span class="text-indigo-600">.</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">About</a>
+                <a href="#skills" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Skills</a>
+                <a href="#projects" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Projects</a>
+                <a href="#experience"
+                   class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Experience</a>
+                <a href="#contact"
+                   class="px-5 py-2.5 bg-slate-900 text-black text-sm font-medium rounded-full hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-indigo-500/20">
+                    Let's Talk
                 </a>
-
-                <!-- Mobile menu button -->
-                <button type="button" id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#about" class="text-slate-600 hover:text-slate-900 transition font-medium text-sm">About</a>
-                    <a href="#skills" class="text-slate-600 hover:text-slate-900 transition font-medium text-sm">Skills</a>
-                    <a href="#projects" class="text-slate-600 hover:text-slate-900 transition font-medium text-sm">Projects</a>
-                    <a href="#experience" class="text-slate-600 hover:text-slate-900 transition font-medium text-sm">Experience</a>
-                    <a href="#contact" class="px-4 py-2 bg-indigo-600 text-black rounded-full text-sm font-medium hover:bg-indigo-700 hover:shadow-lg transition">
-                        Contact
+                @auth
+                    <a href="{{ route('admin.dashboard') }}"
+                       class="text-slate-400 hover:text-slate-900 transition-colors">
+                        <i class="fas fa-cog"></i>
                     </a>
-                    @auth
-                        <a href="{{ route('admin.dashboard') }}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
-                            <i class="fas fa-cog mr-1"></i> Admin
-                        </a>
-                    @endauth
-                </div>
+                @endauth
             </div>
 
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <div class="flex flex-col space-y-3">
-                    <a href="#about" class="text-slate-600 hover:text-slate-900 py-2">About</a>
-                    <a href="#skills" class="text-slate-600 hover:text-slate-900 py-2">Skills</a>
-                    <a href="#projects" class="text-slate-600 hover:text-slate-900 py-2">Projects</a>
-                    <a href="#experience" class="text-slate-600 hover:text-slate-900 py-2">Experience</a>
-                    <a href="#contact" class="text-slate-600 hover:text-slate-900 py-2">Contact</a>
-                    @auth
-                        <a href="{{ route('admin.dashboard') }}" class="text-indigo-600 py-2">Admin Panel</a>
-                    @endauth
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-600 hover:text-slate-900">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100">
+        <div class="px-4 pt-2 pb-6 space-y-1">
+            <a href="#about"
+               class="block px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-lg">About</a>
+            <a href="#skills"
+               class="block px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-lg">Skills</a>
+            <a href="#projects"
+               class="block px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-lg">Projects</a>
+            <a href="#experience"
+               class="block px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-lg">Experience</a>
+            <a href="#contact" class="block px-3 py-2 text-base font-medium text-indigo-600 font-semibold">Contact
+                Me</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="about" class="pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            <div class="flex-1 text-center lg:text-left">
+                <div
+                    class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-sm font-medium mb-6">
+                    <span class="flex h-2 w-2 rounded-full bg-indigo-600 mr-2"></span>
+                    Available for new projects
                 </div>
-            </div>
-        </div>
-    </nav>
+                <h1 class="text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 leading-tight">
+                    Building digital <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">experiences</span>
+                    that matter.
+                </h1>
+                <p class="text-lg text-slate-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                    {{ $profile?->bio ?? 'I am a passionate developer focused on creating intuitive and performant web applications.' }}
+                </p>
 
-    <!-- Hero Section -->
-    <section id="about" class="relative min-h-screen flex items-center pt-16 overflow-hidden">
-        <!-- Background decoration -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute -top-40 -right-40 w-80 h-80 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 blob"></div>
-            <div class="absolute top-40 -left-40 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 blob" style="animation-delay: 2s;"></div>
-            <div class="absolute bottom-40 right-40 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 blob" style="animation-delay: 4s;"></div>
-        </div>
-
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <!-- Text Content -->
-                <div class="text-center lg:text-left order-2 lg:order-1">
-                    <div class="inline-flex items-center px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 text-sm font-medium mb-6">
-                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                        Available for opportunities
-                    </div>
-
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 leading-tight">
-                        Hi, I'm <span class="gradient-text">{{ $profile?->name ?? 'Developer' }}</span>
-                    </h1>
-
-                    @if($profile?->major)
-                        <p class="text-xl sm:text-2xl text-indigo-600 font-semibold mb-6">{{ $profile->major }}</p>
-                    @endif
-
-                    @if($profile?->bio)
-                        <p class="text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">{{ $profile->bio }}</p>
-                    @endif
-
-                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
-                        <a href="#contact" class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-black rounded-full font-semibold hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-300 transform hover:-translate-y-1">
-                            <span>Get in Touch</span>
-                            <svg class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
-                        </a>
-                        <a href="#projects" class="inline-flex items-center px-8 py-4 border-2 border-slate-200 text-slate-700 rounded-full font-semibold hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300">
-                            View Projects
-                        </a>
-                    </div>
-
-                    <!-- Social Links from Contacts -->
-                    @if($contacts->count() > 0)
-                        <div class="mt-10 flex items-center gap-4 justify-center lg:justify-start">
-                            <span class="text-sm text-slate-500">Find me on:</span>
-                            <div class="flex gap-3">
-                                @foreach($contacts as $contact)
-                                    <a href="{{ $contact->link }}" target="_blank" rel="noopener noreferrer"
-                                       class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-600 hover:text-black transition-all duration-300"
-                                       title="{{ $contact->title }}">
-                                        @if($contact->icon)
-                                            <i class="{{ $contact->icon }}"></i>
-                                        @else
-                                            <i class="fas fa-link"></i>
-                                        @endif
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                    <a href="#projects"
+                       class="w-full sm:w-auto px-8 py-3.5 bg-slate-900 text-black font-medium rounded-full hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-indigo-500/20 text-center">
+                        View My Work
+                    </a>
+                    <a href="#contact"
+                       class="w-full sm:w-auto px-8 py-3.5 bg-white text-slate-900 border border-slate-200 font-medium rounded-full hover:border-indigo-600 hover:text-indigo-600 transition-all duration-300 text-center">
+                        Contact Me
+                    </a>
                 </div>
 
-                <!-- Profile Image -->
-                <div class="flex justify-center order-1 lg:order-2">
-                    <div class="relative">
-                        <!-- Decorative rings -->
-                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full blur-2xl opacity-20 scale-110"></div>
-                        <div class="relative floating">
-                            @if($profile?->image)
-                                <img src="{{ Storage::url($profile->image) }}"
-                                     alt="{{ $profile->name }}"
-                                     class="w-64 h-64 sm:w-80 sm:h-80 rounded-full object-cover shadow-2xl ring-8 ring-white">
-                            @else
-                                <div class="w-64 h-64 sm:w-80 sm:h-80 rounded-full hero-gradient flex items-center justify-center shadow-2xl ring-8 ring-white">
-                                    <span class="text-7xl sm:text-8xl font-bold text-black">
-                                        {{ substr($profile?->name ?? 'P', 0, 1) }}
-                                    </span>
+                @if($contacts->count() > 0)
+                    <div class="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-4">
+                        @foreach($contacts as $contact)
+                            @php
+                                $link = $contact->link;
+                                $lowerTitle = strtolower($contact->title ?? '');
+                                $isWhatsApp = str_contains($lowerTitle, 'whatsapp');
+
+                                if (!$isWhatsApp && !str_starts_with($link, 'http') && !str_starts_with($link, 'mailto:')) {
+                                    $link = str_contains($link, '@') ? 'mailto:' . $link : 'https://' . $link;
+                                }
+                            @endphp
+
+                            @if($isWhatsApp)
+                                <div class="flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full border border-green-100">
+                                    <i class="{{ $contact->icon ?? 'fab fa-whatsapp' }} text-xl text-green-500"></i>
+                                    <span class="font-medium text-slate-700">{{ $contact->link }}</span>
                                 </div>
+                            @else
+                                <a href="{{ $link }}" target="_blank"
+                                   class="text-slate-400 hover:text-indigo-600 transition-colors text-2xl">
+                                    @if($contact->icon)
+                                        <i class="{{ $contact->icon }}"></i>
+                                    @else
+                                        <i class="fas fa-link"></i>
+                                    @endif
+                                </a>
                             @endif
-                        </div>
+                        @endforeach
                     </div>
+                @endif
+            </div>
+
+            <div class="flex-1 relative">
+                <div class="relative w-72 h-72 sm:w-96 sm:h-96 mx-auto">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-600 rounded-[2rem] rotate-6 opacity-20 blur-2xl"></div>
+                    @if($profile?->image)
+                        <img src="{{ Storage::url($profile->image) }}"
+                             alt="{{ $profile->name }}"
+                             class="relative w-full h-full object-cover rounded-[2rem] shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500">
+                    @else
+                        <div
+                            class="relative w-full h-full bg-slate-100 rounded-[2rem] flex items-center justify-center shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500">
+                            <span
+                                class="text-6xl font-bold text-slate-300">{{ substr($profile?->name ?? 'P', 0, 1) }}</span>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
-
-    </section>
-
-    <!-- Skills Section -->
-    @if($skills->count() > 0)
-    <section id="skills" class="py-24 bg-white relative">
+<!-- Skills Section -->
+@if($skills->count() > 0)
+    <section id="skills" class="py-24 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <span class="text-indigo-600 font-semibold text-sm uppercase tracking-wider">What I Know</span>
-                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2">Skills & Technologies</h2>
-                <div class="mt-4 w-20 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto rounded-full"></div>
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Technical Expertise</h2>
+                <p class="text-slate-600">A collection of technologies and tools I've mastered throughout my
+                    journey.</p>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
                 @foreach($skills as $skill)
-                    <div class="skill-card rounded-2xl p-6 text-center card-hover border border-slate-100 shadow-sm">
-                        <div class="w-14 h-14 mx-auto mb-4 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                            <span class="text-2xl font-bold text-black">{{ substr($skill->name, 0, 1) }}</span>
+                    <div
+                        class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 hover:border-indigo-200 hover:shadow-md hover:-translate-y-1 transition-all duration-300 group flex flex-col items-center text-center h-full">
+                        <div
+                            class="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-xl mb-3 group-hover:bg-indigo-600 group-hover:text-black transition-colors shadow-sm">
+                            {{ substr($skill->name, 0, 1) }}
                         </div>
-                        <h3 class="font-semibold text-slate-800 mb-2">{{ $skill->name }}</h3>
+                        <h3 class="font-semibold text-slate-900 mb-2 text-sm sm:text-base line-clamp-2">{{ $skill->name }}</h3>
                         @if($skill->level)
-                            <span class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full
-                                @if($skill->level === 'Expert') bg-emerald-100 text-emerald-700
-                                @elseif($skill->level === 'Advanced') bg-indigo-100 text-indigo-700
-                                @elseif($skill->level === 'Intermediate') bg-amber-100 text-amber-700
-                                @else bg-slate-100 text-slate-700
-                                @endif">
-                                @if($skill->level === 'Expert')
-                                    <i class="fas fa-star mr-1 text-xs"></i>
-                                @elseif($skill->level === 'Advanced')
-                                    <i class="fas fa-fire mr-1 text-xs"></i>
-                                @elseif($skill->level === 'Intermediate')
-                                    <i class="fas fa-chart-line mr-1 text-xs"></i>
-                                @else
-                                    <i class="fas fa-seedling mr-1 text-xs"></i>
-                                @endif
+                            <span class="mt-auto text-[10px] sm:text-xs font-medium px-2.5 py-1 rounded-full border
+                                {{ $skill->level === 'Expert' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                                  ($skill->level === 'Advanced' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-slate-50 text-slate-600 border-slate-100') }}">
                                 {{ $skill->level }}
                             </span>
                         @endif
@@ -195,241 +187,233 @@
             </div>
         </div>
     </section>
-    @endif
+@endif
 
-    <!-- Projects Section -->
-    @if($projects->count() > 0)
-    <section id="projects" class="py-24 bg-slate-50 relative">
+<!-- Projects Section -->
+@if($projects->count() > 0)
+    <section id="projects" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <span class="text-indigo-600 font-semibold text-sm uppercase tracking-wider">My Work</span>
-                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2">Featured Projects</h2>
-                <div class="mt-4 w-20 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto rounded-full"></div>
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                <div class="max-w-2xl">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4">Featured Projects</h2>
+                    <p class="text-slate-600">Here are some of the projects I've worked on. Each one presented unique
+                        challenges and learning opportunities.</p>
+                </div>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($projects as $project)
-                    <div class="group bg-white rounded-3xl overflow-hidden shadow-sm card-hover border border-slate-100">
-                        <!-- Project Image -->
-                        <div class="relative h-56 overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100">
+                    <div
+                        class="group bg-white rounded-2xl overflow-hidden border border-slate-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
+                        <div class="relative h-52 overflow-hidden bg-slate-100">
                             @if($project->image)
-                                <img src="{{ Storage::url($project->image) }}"
-                                     alt="{{ $project->name }}"
-                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 h-12 w-20">
+                                <img src="{{ Storage::url($project->image) }}" alt="{{ $project->name }}"
+                                     class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
                             @else
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <i class="fas fa-code text-6xl text-indigo-300"></i>
+                                <div class="w-full h-full flex items-center justify-center bg-slate-50">
+                                    <i class="fas fa-code text-4xl text-slate-300"></i>
                                 </div>
                             @endif
-                            <!-- Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+
+                            <!-- Overlay with button -->
+                            <div
+                                class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
                                 @if($project->link)
-                                    <a href="{{ $project->link }}" target="_blank" rel="noopener noreferrer"
-                                       class="px-6 py-2 bg-white text-slate-900 rounded-full text-sm font-medium hover:bg-indigo-600 hover:text-black transition">
-                                        <i class="fas fa-external-link-alt mr-2"></i>View Project
+                                    <a href="{{ $project->link }}" target="_blank"
+                                       class="px-6 py-2.5 bg-white text-slate-900 rounded-full text-sm font-semibold hover:bg-indigo-50 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 shadow-lg">
+                                        View Project <i class="fas fa-arrow-right ml-2 text-xs"></i>
                                     </a>
                                 @endif
                             </div>
                         </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">{{ $project->name }}</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed line-clamp-3 mb-4 flex-1">{{ $project->description }}</p>
 
-                        <!-- Project Info -->
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition">
-                                {{ $project->name }}
-                            </h3>
-                            @if($project->description)
-                                <p class="text-slate-600 text-sm leading-relaxed line-clamp-3">
-                                    {{ $project->description }}
-                                </p>
-                            @endif
-
-                            @if($project->link)
-                                <div class="mt-4 pt-4 border-t border-slate-100">
-                                    <a href="{{ $project->link }}" target="_blank" rel="noopener noreferrer"
-                                       class="inline-flex items-center text-indigo-600 font-medium text-sm hover:text-indigo-800 transition group/link">
-                                        <span>View Project</span>
-                                        <svg class="ml-2 w-4 h-4 group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                        </svg>
+                            <div class="pt-4 border-t border-slate-50 flex items-center justify-between mt-auto">
+                                <span class="text-xs font-medium text-slate-400">Web Development</span>
+                                @if($project->link)
+                                    <a href="{{ $project->link }}" target="_blank"
+                                       class="text-indigo-600 hover:text-indigo-700 text-sm font-medium flex items-center gap-1">
+                                        Details <i class="fas fa-chevron-right text-[10px]"></i>
                                     </a>
-                                </div>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     </div>
                 @endforeach
             </div>
         </div>
     </section>
-    @endif
+@endif
 
-    <!-- Experience Section -->
-    @if($experiences->count() > 0)
-    <section id="experience" class="py-24 bg-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Experience Section -->
+@if($experiences->count() > 0)
+    <section id="experience" class="py-24 bg-slate-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <span class="text-indigo-600 font-semibold text-sm uppercase tracking-wider">My Journey</span>
-                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2">Work Experience</h2>
-                <div class="mt-4 w-20 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto rounded-full"></div>
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Work Experience</h2>
+                <p class="text-slate-600">My professional journey and career milestones.</p>
             </div>
 
-            <div class="max-w-4xl mx-auto">
-                <div class="relative">
-                    <!-- Timeline line -->
-                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-px h-full w-0.5 timeline-line"></div>
+            <div class="space-y-8 relative">
+                <!-- Mobile Timeline Line -->
+                <div class="absolute left-[19px] top-4 bottom-4 w-0.5 bg-slate-200 md:hidden"></div>
 
-                    @foreach($experiences as $index => $experience)
-                        <div class="relative mb-12 last:mb-0">
-                            <div class="flex items-center md:justify-center mb-4 md:mb-0">
-                                <div class="absolute left-0 md:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-4 border-indigo-600 rounded-full z-10"></div>
+                @foreach($experiences as $experience)
+                    <div class="relative pl-12 md:pl-0">
+                        <!-- Desktop Timeline Line -->
+                        <div
+                            class="hidden md:block absolute left-[50%] top-0 bottom-0 w-px bg-slate-200 -translate-x-1/2"></div>
+
+                        <div class="md:flex items-center justify-between group">
+                            <!-- Left Side (Date) -->
+                            <div class="md:w-1/2 md:pr-12 md:text-right mb-4 md:mb-0">
+                                <span
+                                    class="inline-block px-4 py-1.5 rounded-full bg-white border border-slate-200 text-sm font-medium text-indigo-600 shadow-sm group-hover:border-indigo-200 transition-colors">
+                                    {{ $experience->start_date->format('M Y') }} -
+                                    {{ $experience->end_date ? $experience->end_date->format('M Y') : 'Present' }}
+                                </span>
                             </div>
 
-                            <div class="ml-8 md:ml-0 {{ $index % 2 === 0 ? 'md:pr-8 md:text-right md:mr-1/2' : 'md:pl-8 md:ml-1/2' }}">
-                                <div class="bg-slate-50 p-6 rounded-2xl shadow-sm card-hover border border-slate-100 {{ $index % 2 === 0 ? 'md:mr-8' : 'md:ml-8' }}">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700 mb-3">
-                                        <i class="far fa-calendar-alt mr-1"></i>
-                                        {{ $experience->start_date->format('M Y') }} -
-                                        {{ $experience->end_date ? $experience->end_date->format('M Y') : 'Present' }}
-                                    </span>
-                                    <h3 class="text-xl font-bold text-slate-900 mb-1">{{ $experience->title }}</h3>
-                                    <p class="text-indigo-600 font-semibold mb-3">{{ $experience->company }}</p>
-                                    @if($experience->description)
-                                        <p class="text-slate-600 text-sm leading-relaxed">{{ $experience->description }}</p>
-                                    @endif
+                            <!-- Center Dot -->
+                            <div
+                                class="absolute left-[13px] md:left-[50%] w-3.5 h-3.5 rounded-full bg-indigo-600 border-[3px] border-white shadow-md md:-translate-x-1/2 mt-2 md:mt-0 z-10 ring-1 ring-slate-200"></div>
+
+                            <!-- Right Side (Content) -->
+                            <div class="md:w-1/2 md:pl-12">
+                                <div
+                                    class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md hover:border-indigo-100 transition-all duration-300 relative">
+                                    <!-- Arrow for desktop -->
+                                    <div
+                                        class="hidden md:block absolute top-1/2 -left-2 w-4 h-4 bg-white border-l border-b border-slate-100 transform rotate-45 -translate-y-1/2"></div>
+
+                                    <h3 class="text-lg font-bold text-slate-900">{{ $experience->title }}</h3>
+                                    <div class="text-indigo-600 font-medium mb-3 flex items-center gap-2">
+                                        <i class="fas fa-building text-xs opacity-70"></i>
+                                        {{ $experience->company }}
+                                    </div>
+                                    <p class="text-slate-600 text-sm leading-relaxed">{{ $experience->description }}</p>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
-    @endif
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-slate-100 relative overflow-hidden">
-        <!-- Background -->
-        <div class="absolute inset-0 hero-gradient opacity-5"></div>
-
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <span class="text-indigo-600 font-semibold text-sm uppercase tracking-wider">Get In Touch</span>
-                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2">Let's Work Together</h2>
-                <div class="mt-4 w-20 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto rounded-full"></div>
-                <p class="mt-6 text-slate-600 max-w-2xl mx-auto text-lg">
-                    Have a project in mind or just want to say hello? Feel free to reach out through any of the platforms below.
-                </p>
-            </div>
-
-            @if($contacts->count() > 0)
-                <div class="grid sm:grid-cols-2 lg:grid-cols-{{ min($contacts->count(), 4) }} gap-6 max-w-4xl mx-auto">
-                    @foreach($contacts as $contact)
-                        <a href="{{ $contact->link }}" target="_blank" rel="noopener noreferrer"
-                           class="group bg-white p-6 rounded-2xl shadow-sm card-hover border border-slate-100 text-center">
-                            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                @if($contact->icon)
-                                    <i class="{{ $contact->icon }} text-2xl text-black"></i>
-                                @else
-                                    <i class="fas fa-link text-2xl text-black"></i>
-                                @endif
-                            </div>
-                            <h3 class="font-semibold text-slate-900 group-hover:text-indigo-600 transition">{{ $contact->title }}</h3>
-                            <p class="text-sm text-slate-500 mt-1 truncate">{{ str_replace(['https://', 'http://', 'mailto:', 'tel:'], '', $contact->link) }}</p>
-                        </a>
-                    @endforeach
-                </div>
-            @endif
-
-            <!-- CTA Card -->
-            <div class="mt-16 max-w-3xl mx-auto">
-                <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-8 sm:p-12 text-center text-black shadow-2xl shadow-indigo-500/30">
-                    <h3 class="text-2xl sm:text-3xl font-bold mb-4 text-black">Ready to start a project?</h3>
-                    <p class="text-black/90 mb-8 max-w-xl mx-auto">
-                        I'm always open to discussing new projects, creative ideas or opportunities to be part of your vision.
-                    </p>
-                    @if($contacts->where('title', 'Email')->first() || $contacts->first())
-                        <a href="{{ $contacts->where('title', 'Email')->first()?->link ?? $contacts->first()?->link ?? '#' }}"
-                           class="inline-flex items-center px-8 py-4 bg-white text-indigo-600 rounded-full font-semibold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                            <i class="fas fa-paper-plane mr-2"></i>
-                            Send Me a Message
-                        </a>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-black py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-6 md:mb-0">
-                    <a href="#" class="text-2xl font-bold text-indigo-400 hover:text-indigo-300 transition">
-                        {{ $profile?->name ?? 'Portfolio' }}
-                    </a>
-                    <p class="text-slate-400 mt-2 text-sm">Building digital experiences with passion.</p>
-                </div>
-
-                @if($contacts->count() > 0)
-                    <div class="flex gap-4">
-                        @foreach($contacts as $contact)
-                            <a href="{{ $contact->link }}" target="_blank" rel="noopener noreferrer"
-                               class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:bg-indigo-600 hover:text-black transition-all duration-300"
-                               title="{{ $contact->title }}">
-                                @if($contact->icon)
-                                    <i class="{{ $contact->icon }}"></i>
-                                @else
-                                    <i class="fas fa-link"></i>
-                                @endif
-                            </a>
-                        @endforeach
                     </div>
-                @endif
-            </div>
-
-            <div class="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400 text-sm">
-                <p>&copy; {{ date('Y') }} {{ $profile?->name ?? 'Portfolio' }}. All rights reserved.</p>
+                @endforeach
             </div>
         </div>
-    </footer>
+    </section>
+@endif
 
-    <!-- Mobile Menu Script -->
-    <script>
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
+<!-- Contact Section -->
+<section id="contact" class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-slate-900 rounded-[2.5rem] p-8 md:p-16 overflow-hidden relative">
+            <!-- Decorative Elements -->
+            <div
+                class="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-indigo-600 rounded-full blur-3xl opacity-20"></div>
+            <div
+                class="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-violet-600 rounded-full blur-3xl opacity-20"></div>
 
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('mobile-menu').classList.add('hidden');
+            <div class="relative z-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-black mb-6">Ready to start your next project?</h2>
+                <p class="text-slate-300 text-lg mb-10">
+                    I'm currently available for freelance work and open to new opportunities.
+                    Let's discuss how we can work together to achieve your goals.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 flex-wrap">
+                    @foreach($contacts as $contact)
+                        @php
+                            $link = $contact->link;
+                            $lowerTitle = strtolower($contact->title ?? '');
+                            $isWhatsApp = str_contains($lowerTitle, 'whatsapp');
+
+                            if (!$isWhatsApp && !str_starts_with($link, 'http') && !str_starts_with($link, 'mailto:')) {
+                                $link = str_contains($link, '@') ? 'mailto:' . $link : 'https://' . $link;
+                            }
+                        @endphp
+
+                        @if($isWhatsApp)
+                            <div class="px-8 py-4 bg-white text-slate-900 font-medium rounded-full shadow-lg flex items-center gap-3">
+                                <i class="fab fa-whatsapp text-xl text-green-500"></i>
+                                <span>{{ $contact->link }}</span>
+                            </div>
+                        @else
+                            <a href="{{ $link }}" target="_blank"
+                               class="px-8 py-4 bg-white text-slate-900 font-medium rounded-full hover:bg-indigo-50 transition-colors w-full sm:w-auto shadow-lg text-center">
+                                {{ $contact->title }}
+                            </a>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-white border-t border-slate-100 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="text-center md:text-left">
+            <span class="text-xl font-bold text-slate-900">{{ $profile?->name ?? 'Portfolio' }}<span
+                    class="text-indigo-600">.</span></span>
+            <p class="text-slate-500 text-sm mt-1">&copy; {{ date('Y') }} All rights reserved.</p>
+        </div>
+
+        <div class="flex items-center gap-6 flex-wrap justify-center md:justify-end">
+            @foreach($contacts as $contact)
+                @php
+                    $link = $contact->link;
+                    $lowerTitle = strtolower($contact->title ?? '');
+                    $isWhatsApp = str_contains($lowerTitle, 'whatsapp');
+
+                    if (!$isWhatsApp && !str_starts_with($link, 'http') && !str_starts_with($link, 'mailto:')) {
+                        $link = str_contains($link, '@') ? 'mailto:' . $link : 'https://' . $link;
+                    }
+                @endphp
+
+                @if($isWhatsApp)
+                    <div class="flex items-center gap-2 text-slate-500">
+                        <i class="fab fa-whatsapp text-xl text-green-500"></i>
+                        <span class="text-sm">{{ $contact->link }}</span>
+                    </div>
+                @else
+                    <a href="{{ $link }}" target="_blank"
+                       class="text-slate-400 hover:text-indigo-600 transition-colors">
+                        @if($contact->icon)
+                            <i class="{{ $contact->icon }} text-xl"></i>
+                        @else
+                            <i class="fas fa-link text-xl"></i>
+                        @endif
+                    </a>
+                @endif
+            @endforeach
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Mobile menu toggle
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
             });
-        });
-
-        // Smooth scrolling for all anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Navbar background on scroll
-        window.addEventListener('scroll', function() {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.classList.add('shadow-md');
-            } else {
-                nav.classList.remove('shadow-md');
+            // Close mobile menu if open
+            if (!menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
             }
         });
-    </script>
+    });
+</script>
 </body>
 </html>
-

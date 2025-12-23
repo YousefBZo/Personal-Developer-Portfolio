@@ -8,6 +8,30 @@ use App\Http\Controllers\Admin\ExperienceController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+
+/*
+|--------------------------------------------------------------------------
+| Health Check Route
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/health', function () {
+    try {
+        DB::connection()->getPdo();
+        return response()->json([
+            'status' => 'healthy',
+            'database' => 'connected',
+            'timestamp' => now()->toISOString(),
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'unhealthy',
+            'database' => 'disconnected',
+            'error' => $e->getMessage(),
+        ], 503);
+    }
+})->name('health');
 
 /*
 |--------------------------------------------------------------------------

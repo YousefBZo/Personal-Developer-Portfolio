@@ -34,7 +34,7 @@
                 <a href="#experience"
                    class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Experience</a>
                 <a href="#contact"
-                   class="px-5 py-2.5 bg-slate-900 text-black text-sm font-medium rounded-full hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-indigo-500/20">
+                   class="px-5 py-2.5 bg-slate-900 text-white text-sm font-medium rounded-full hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-indigo-500/20">
                     Let's Talk
                 </a>
                 @auth
@@ -93,7 +93,7 @@
 
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                     <a href="#projects"
-                       class="w-full sm:w-auto px-8 py-3.5 bg-slate-900 text-black font-medium rounded-full hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-indigo-500/20 text-center">
+                       class="w-full sm:w-auto px-8 py-3.5 bg-slate-900 text-white font-medium rounded-full hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-indigo-500/20 text-center">
                         View My Work
                     </a>
                     <a href="#contact"
@@ -116,7 +116,8 @@
                             @endphp
 
                             @if($isWhatsApp)
-                                <div class="flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full border border-green-100">
+                                <div
+                                    class="flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full border border-green-100">
                                     <i class="{{ $contact->icon ?? 'fab fa-whatsapp' }} text-xl text-green-500"></i>
                                     <span class="font-medium text-slate-700">{{ $contact->link }}</span>
                                 </div>
@@ -315,7 +316,8 @@
                 class="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-violet-600 rounded-full blur-3xl opacity-20"></div>
 
             <div class="relative z-10 text-center max-w-3xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-bold text-black mb-6">Ready to start your next project?</h2>
+                <h2 class="text-3xl md:text-4xl font-bold hover:text-gray-50 text-white mb-6">Ready to start your next
+                    project?</h2>
                 <p class="text-slate-300 text-lg mb-10">
                     I'm currently available for freelance work and open to new opportunities.
                     Let's discuss how we can work together to achieve your goals.
@@ -334,7 +336,8 @@
                         @endphp
 
                         @if($isWhatsApp)
-                            <div class="px-8 py-4 bg-white text-slate-900 font-medium rounded-full shadow-lg flex items-center gap-3">
+                            <div
+                                class="px-8 py-4 bg-white text-slate-900 font-medium rounded-full shadow-lg flex items-center gap-3">
                                 <i class="fab fa-whatsapp text-xl text-green-500"></i>
                                 <span>{{ $contact->link }}</span>
                             </div>

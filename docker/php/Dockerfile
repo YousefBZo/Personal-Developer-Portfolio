@@ -1,11 +1,9 @@
-FROM php:8.4-fpm
-
-RUN echo "Bism'ELLEH"
-
+# ===========================================
+# Stage 1: Build stage (install dependencies)
+# ===========================================
+FROM php:8.4-fpm AS builder
 
 RUN apt update && apt install -y \
-    iputils-ping \
-    nano \
     git \
     unzip \
     zip \
@@ -17,32 +15,50 @@ RUN apt update && apt install -y \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions needed for Laravel
+# Install PHP extensions
 RUN docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath
 
+# Install Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
- && php -r "if (hash_file('sha384', 'composer-setup.php') === 'c8b085408188070d5f52bcfe4ecfbee5f727afa458b2573b8eaaf77b3419b0bf2768dc67c86944da1544f06fa544fd47') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }" \
- && php composer-setup.php \
- && php -r "unlink('composer-setup.php');" \
- && mv composer.phar /usr/local/bin/composer
-
-RUN composer --version
-
-RUN mkdir -p /root/.composer \
-    && composer global require laravel/installer
-
-# install node (for assets on-demand)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
- && apt-get update \
- && apt-get install -y --no-install-recommends nodejs build-essential \
- && rm -rf /var/lib/apt/lists/*
-
-ENV PATH="/root/.composer/vendor/bin:${PATH}"
-
+    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+    && php -r "unlink('composer-setup.php');"
 
 WORKDIR /app
 
+# Copy composer files first for better caching
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+
+# ===========================================
+# Stage 2: Production stage (final image)
+# ===========================================
+FROM php:8.4-fpm AS production
+
+RUN apt update && apt install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libpq-dev \
+    libonig-dev \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath
+
+# Install Composer (needed for autoload)
+COPY --from=builder /usr/local/bin/composer /usr/local/bin/composer
+
+WORKDIR /app
+
+# Copy vendor from builder
+COPY --from=builder /app/vendor ./vendor
+
 COPY ./entrypoint.sh /
 RUN chmod +x /entrypoint.sh
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD php-fpm-healthcheck || exit 1
 
 ENTRYPOINT [ "/entrypoint.sh" ]

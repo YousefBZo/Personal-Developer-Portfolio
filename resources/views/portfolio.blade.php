@@ -45,7 +45,7 @@
                 @endauth
             </div>
 
-            <!-- Mobile Menu Button -->
+            <!-- Mobile Menu Button Responsive-->
             <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-600 hover:text-slate-900">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -55,7 +55,7 @@
         </div>
     </div>
 
-    <!-- Mobile Menu -->
+    <!-- Mobile Menu Responsive -->
     <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100">
         <div class="px-4 pt-2 pb-6 space-y-1">
             <a href="#about"
@@ -206,7 +206,8 @@
                 @foreach($projects as $project)
                     <div
                         class="group bg-white rounded-2xl overflow-hidden border border-slate-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
-                        <div class="relative h-52 overflow-hidden bg-slate-100">
+                        <div
+                            class="relative h-52 overflow-hidden bg-slate-100">
                             @if($project->image)
                                 <img src="{{ Storage::url($project->image) }}" alt="{{ $project->name }}"
                                      class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
@@ -396,7 +397,7 @@
 </footer>
 
 <script>
-    // Mobile menu toggle
+    // Mobile menu toggle responsive
     const btn = document.getElementById('mobile-menu-btn');
     const menu = document.getElementById('mobile-menu');
 

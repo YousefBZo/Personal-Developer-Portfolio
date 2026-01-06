@@ -82,10 +82,8 @@ class ProjectService
 
     private function isCloudinaryConfigured(): bool
     {
-        return !empty(config('cloudinary.cloud_url')) ||
-               (!empty(env('CLOUDINARY_CLOUD_NAME')) &&
-                !empty(env('CLOUDINARY_API_KEY')) &&
-                !empty(env('CLOUDINARY_API_SECRET')));
+        $cloudUrl = env('CLOUDINARY_URL');
+        return !empty($cloudUrl) && $cloudUrl !== 'cloudinary://:@';
     }
 
     private function uploadToCloudinary(UploadedFile $file, ?string $oldImage = null): string

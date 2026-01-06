@@ -40,8 +40,9 @@ class ProfileService
 
     private function isCloudinaryConfigured(): bool
     {
-        $cloudUrl = env('CLOUDINARY_URL');
-        return !empty($cloudUrl) && $cloudUrl !== 'cloudinary://:@';
+        $cloudUrl = config('cloudinary.cloud_url');
+        Log::info('Cloudinary URL check: ' . ($cloudUrl ? 'configured' : 'not configured'));
+        return !empty($cloudUrl) && !str_contains($cloudUrl, ':@');
     }
 
     private function uploadToCloudinary(UploadedFile $file, ?string $oldImage): string

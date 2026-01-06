@@ -99,5 +99,5 @@ RUN php artisan config:clear \
 # Expose port (Render uses PORT env variable, default to 80)
 EXPOSE 80
 
-# Start script: generate key if missing, run migrations, cache config, start server
-CMD ["sh", "-c", "if [ -z \"$APP_KEY\" ]; then echo 'ERROR: APP_KEY is not set!' && exit 1; fi && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-80}"]
+# Start script: check APP_KEY, run migrations and seeders, cache config, start server
+CMD ["sh", "-c", "if [ -z \"$APP_KEY\" ]; then echo 'ERROR: APP_KEY is not set!' && exit 1; fi && php artisan migrate --force && php artisan db:seed --force && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-80}"]

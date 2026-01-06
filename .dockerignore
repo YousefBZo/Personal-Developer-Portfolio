@@ -39,5 +39,4 @@ phpunit.xml
 *.md
 !README.md
 docker-compose*.yml
-Dockerfile
 

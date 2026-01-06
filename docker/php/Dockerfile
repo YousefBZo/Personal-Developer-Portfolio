@@ -1,27 +1,25 @@
 # ===========================================
 # Stage 1: Build stage (install dependencies)
 # ===========================================
-FROM php:8.4-fpm AS builder
+FROM php:8.3-fpm-alpine AS builder
 
-RUN apt update && apt install -y \
+# Use CDN mirror for faster downloads
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+
+RUN apk add --no-cache \
     git \
     unzip \
     zip \
     libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libpq-dev \
-    libonig-dev \
-    && apt clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath
+    libjpeg-turbo-dev \
+    freetype-dev \
+    postgresql-dev \
+    oniguruma-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath gd
 
 # Install Composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-    && php -r "unlink('composer-setup.php');"
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
@@ -32,33 +30,33 @@ RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 # ===========================================
 # Stage 2: Production stage (final image)
 # ===========================================
-FROM php:8.4-fpm AS production
+FROM php:8.3-fpm-alpine AS production
 
-RUN apt update && apt install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libpq-dev \
-    libonig-dev \
-    && apt clean \
-    && rm -rf /var/lib/apt/lists/*
+# Use CDN mirror for faster downloads
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath
+# Install only runtime libraries (not -dev packages)
+RUN apk add --no-cache \
+    libpng \
+    libjpeg-turbo \
+    freetype \
+    postgresql-libs \
+    oniguruma
 
-# Install Composer (needed for autoload)
-COPY --from=builder /usr/local/bin/composer /usr/local/bin/composer
+# Copy PHP extensions from builder stage
+COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
+COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
+
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
 # Copy vendor from builder
 COPY --from=builder /app/vendor ./vendor
 
-COPY ./entrypoint.sh /
+# Copy entrypoint script
+COPY docker/php/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD php-fpm-healthcheck || exit 1
 
 ENTRYPOINT [ "/entrypoint.sh" ]

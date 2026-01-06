@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
 # For Laravel needed structure and permissions
-mkdir -p /app/storage/framework/{sessions,views,cache}
+mkdir -p /app/storage/framework/sessions
+mkdir -p /app/storage/framework/views
+mkdir -p /app/storage/framework/cache
 mkdir -p /app/bootstrap/cache
 
 # Set permissions only on directories that need write access

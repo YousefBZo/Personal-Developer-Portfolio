@@ -1,7 +1,7 @@
 # ===========================================
 # Stage 1: Build stage (install dependencies)
 # ===========================================
-FROM php:8.3-fpm-alpine AS builder
+FROM php:8.4-fpm-alpine AS builder
 
 # Use CDN mirror for faster downloads
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
@@ -30,7 +30,7 @@ RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 # ===========================================
 # Stage 2: Production stage (final image)
 # ===========================================
-FROM php:8.3-fpm-alpine AS production
+FROM php:8.4-fpm-alpine AS production
 
 # Use CDN mirror for faster downloads
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories

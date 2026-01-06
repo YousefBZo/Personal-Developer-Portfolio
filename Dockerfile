@@ -21,7 +21,7 @@ RUN npm run build
 # ===========================================
 # Stage 2: Build PHP extensions
 # ===========================================
-FROM php:8.3-cli-alpine AS php-builder
+FROM php:8.4-cli-alpine AS php-builder
 
 # Use CDN mirror for faster downloads
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
@@ -40,7 +40,7 @@ RUN apk add --no-cache \
 # ===========================================
 # Stage 3: Final PHP Application
 # ===========================================
-FROM php:8.3-cli-alpine
+FROM php:8.4-cli-alpine
 
 # Use CDN mirror for faster downloads
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories

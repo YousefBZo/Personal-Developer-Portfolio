@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
         // Force HTTPS in production
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
+
+            // Set secure cookies for HTTPS
+            config(['session.secure' => true]);
+            config(['session.same_site' => 'lax']);
         }
     }
 }

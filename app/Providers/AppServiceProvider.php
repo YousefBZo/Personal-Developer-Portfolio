@@ -38,12 +38,17 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get image URL - handles both Cloudinary URLs and local storage paths
+     * Get image URL - handles Base64 data URLs, full URLs, and local storage paths
      */
     public static function getImageUrl(?string $path): string
     {
         if (empty($path)) {
             return '';
+        }
+
+        // If it's a Base64 data URL, return as-is
+        if (str_starts_with($path, 'data:')) {
+            return $path;
         }
 
         // If it's already a full URL (Cloudinary or other), return as-is

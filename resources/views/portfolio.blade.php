@@ -141,7 +141,7 @@
                     <div
                         class="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-600 rounded-[2rem] rotate-6 opacity-20 blur-2xl"></div>
                     @if($profile?->image)
-                        <img src="{{ Storage::url($profile->image) }}"
+                        <img src="{{ \App\Providers\AppServiceProvider::getImageUrl($profile->image) }}"
                              alt="{{ $profile->name }}"
                              class="relative w-full h-full object-cover rounded-[2rem] shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500">
                     @else
@@ -208,7 +208,7 @@
                         class="group bg-white rounded-2xl overflow-hidden border border-slate-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
                         <div class="relative h-52 overflow-hidden bg-slate-100">
                             @if($project->image)
-                                <img src="{{ Storage::url($project->image) }}" alt="{{ $project->name }}"
+                                <img src="{{ \App\Providers\AppServiceProvider::getImageUrl($project->image) }}" alt="{{ $project->name }}"
                                      class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-slate-50">

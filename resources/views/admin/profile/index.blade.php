@@ -15,7 +15,7 @@
                     <div class="shrink-0">
                         @if($profile->image)
                             <img class="h-24 w-24 object-cover rounded-full"
-                                 src="{{ Storage::url($profile->image) }}"
+                                 src="{{ \App\Providers\AppServiceProvider::getImageUrl($profile->image) }}"
                                  alt="{{ $profile->name }}">
                         @else
                             <div class="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center">

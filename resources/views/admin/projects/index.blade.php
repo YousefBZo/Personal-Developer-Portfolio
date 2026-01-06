@@ -37,7 +37,7 @@
         @forelse($projects as $project)
             <div class="bg-white rounded-lg shadow overflow-hidden">
                 @if($project->image)
-                    <img src="{{ Storage::url($project->image) }}" alt="{{ $project->name }}" class="w-full h-48 object-cover">
+                    <img src="{{ \App\Providers\AppServiceProvider::getImageUrl($project->image) }}" alt="{{ $project->name }}" class="w-full h-48 object-cover">
                 @else
                     <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
                         <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

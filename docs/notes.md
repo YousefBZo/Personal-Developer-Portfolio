@@ -4,6 +4,88 @@ Some lessons I learned while building this project.
 
 ---
 
+## Deployment Challenges (Render/VPS)
+
+Deploying to Render's free tier was challenging. Here are the main issues I faced and how I solved them:
+
+### 1. PHP Version Mismatch
+**Problem:** The `composer.lock` file had Symfony packages requiring PHP 8.4, but my Dockerfile used PHP 8.3.
+
+**Error:**
+```
+symfony/clock v8.0.0 requires php >=8.4 -> your php version (8.3.29) does not satisfy that requirement
+```
+
+**Solution:** Updated the Dockerfile to use `php:8.4-cli-alpine` instead of `php:8.3-cli-alpine`.
+
+---
+
+### 2. Database Connection Refused
+**Problem:** After deployment, the app couldn't connect to PostgreSQL, showing "connection refused" at `127.0.0.1:5432`.
+
+**Solution:** The database environment variables weren't set in Render. I had to manually add `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` in the Render Web Service environment settings, using the internal hostname from the Render PostgreSQL service.
+
+---
+
+### 3. CSS/JS Not Loading (HTTP vs HTTPS)
+**Problem:** The site loaded but without any styling. Looking at the source, assets were being requested over `http://` while the site was served over `https://`, causing mixed content blocking.
+
+**Solution:** Added `URL::forceScheme('https')` in `AppServiceProvider.php` for production environment:
+```php
+if (config('app.env') === 'production') {
+    URL::forceScheme('https');
+}
+```
+
+---
+
+### 4. Login 500 Error (Session Issues)
+**Problem:** Login worked but redirected to a 500 error. This was caused by session cookie configuration issues with HTTPS.
+
+**Solution:** 
+1. Changed `SESSION_DRIVER` from `cookie` to `file` in environment variables
+2. Added secure cookie settings in AppServiceProvider:
+```php
+config(['session.secure' => true]);
+config(['session.same_site' => 'lax']);
+```
+
+---
+
+### 5. Images Not Persisting (Ephemeral Filesystem)
+**Problem:** Uploaded images would work initially but disappear after each deployment. This is because Render uses an ephemeral filesystem - any files written to disk are lost when the container restarts.
+
+**Solution:** Instead of storing images on the filesystem, I converted them to Base64 and stored them directly in the PostgreSQL database:
+
+1. Created a migration to change `image` columns from `string` to `longText`
+2. Updated the service classes to convert uploaded images to Base64:
+```php
+$imageData = file_get_contents($file->getRealPath());
+$mimeType = $file->getMimeType();
+$base64 = base64_encode($imageData);
+$data['image'] = 'data:' . $mimeType . ';base64,' . $base64;
+```
+
+This way, images persist in the database and survive redeployments.
+
+---
+
+### 6. Database Seeder Duplicate Key Error
+**Problem:** On redeploy, the seeder tried to insert the admin user again, causing a "duplicate key" error.
+
+**Solution:** Changed `User::create()` to `User::firstOrCreate()` in the seeder, so it only creates the user if they don't already exist.
+
+---
+
+### Key Takeaways for Render Deployment:
+- Always use `config()` instead of `env()` in code (env doesn't work after config is cached)
+- Set all environment variables in Render dashboard before deploying
+- Use the **internal hostname** for database connections (not external)
+- Keep database and web service in the **same region**
+- For file uploads, use external storage (Cloudinary, S3) or Base64 in database
+
+---
+
 ## Docker Problem I Faced
 
 The biggest issue I ran into was with the **Vite dev server not being accessible from the browser**. 
